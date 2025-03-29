@@ -1,32 +1,52 @@
 import { createSlice } from "@reduxjs/toolkit";
-const state = {
-  //[{title" , qu: , id:}]
+
+const initialState = {
   items: [],
 };
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState:state,
+  initialState,
   reducers: {
     addToCart: (state, action) => {
-        console.log(state,action,"slice")
       const item = state.items.find((item) => item.id === action.payload.id);
-      console.log(item,"iem")
       if (item) {
         item.quantity += 1;
       } else {
-        console.log(action.payload,"payload")
         state.items.push({ ...action.payload, quantity: 1 });
       }
     },
-    clearCart: (state) => {
-      state.items = [];
+    incrementQuantity: (state, action) => {
+      const item = state.items.find((item) => item.id === action.payload);
+      if (item) {
+        item.quantity += 1;
+      }
+    },
+    decrementQuantity: (state, action) => {
+      const item = state.items.find((item) => item.id === action.payload);
+      if (item && item.quantity > 1) {
+        item.quantity -= 1;
+      }
     },
     removeItem: (state, action) => {
-      state.items = state.items.filter((item) => item.id !== action.payload.id);
+      state.items = state.items.filter((item) => item.id !== action.payload);
     },
+    clearCart: (state) => {
+      state.items = [];
+    }
   },
 });
-export const {addToCart,clearCart,removeItem}=cartSlice.actions;
-export const cartReducer=cartSlice.reducer;
-export const selectorCartCount=(state)=>state.cart.items?.reduce((total, item)=>total+item.quantity,0)
+
+export const { 
+  addToCart, 
+  incrementQuantity, 
+  decrementQuantity, 
+  removeItem, 
+  clearCart 
+} = cartSlice.actions;
+
+export const cartReducer = cartSlice.reducer;
+
+// Selector to get total count of items for cart badge
+export const selectorCartCount = (state) => 
+  state.cart.items.reduce((total, item) => total + item.quantity, 0);
