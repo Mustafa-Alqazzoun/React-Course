@@ -16,9 +16,6 @@ const Cart = () => {
     const items = useSelector((store) => store.cart.items);
     const dispatch = useDispatch();
 
-    // Log to confirm the component is rendering
-    console.log("Cart component rendered with items:", items);
-
     return (
         <Box sx={{ padding: 2 }}>
             <Typography variant="h4" gutterBottom>
@@ -28,89 +25,60 @@ const Cart = () => {
             {items.length > 0 ? (
                 <>
                     <Grid container spacing={2}>
-                        {items.map((item) => {
-                            // Log to confirm each item is being rendered
-                            console.log("Rendering item:", item.id, item.title);
-                            return (
-                                <Grid item xs={12} key={item.id}>
-                                    <Card sx={{ display: 'flex', width: '100%' }}>
-                                        <CardMedia
-                                            component="img"
-                                            sx={{ width: 100, height: 100, objectFit: 'contain' }}
-                                            image={item.image}
-                                            alt={item.title}
-                                        />
-                                        <CardContent sx={{ flex: '1 0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                                            <Box sx={{ flex: 1 }}>
-                                                <Typography variant="h6">
-                                                    {item.title}
-                                                </Typography>
-                                                <Typography variant="body2" color="text.secondary">
-                                                    Price: ${item.price}
-                                                </Typography>
-                                            </Box>
+                        {items.map((item) => (
+                            <Grid item xs={12} key={item.id}>
+                                <Card sx={{ display: 'flex', width: '100%' }}>
+                                    <CardMedia
+                                        component="img"
+                                        sx={{ width: 100, height: 100, objectFit: 'contain' }}
+                                        image={item.image}
+                                        alt={item.title}
+                                    />
+                                    <CardContent sx={{ flex: '1 0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                                        <Box sx={{ flex: 1 }}>
+                                            <Typography variant="h6">
+                                                {item.title}
+                                            </Typography>
+                                            <Typography variant="body2" color="text.secondary">
+                                                Price: ${item.price}
+                                            </Typography>
+                                        </Box>
+                                        
+                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                            <IconButton 
+                                                onClick={() => dispatch(decrementQuantity(item.id))}
+                                                disabled={item.quantity <= 1}
+                                                color="primary"
+                                                size="small"
+                                            >
+                                                <RemoveIcon />
+                                            </IconButton>
                                             
-                                            <Box sx={{ display: 'flex', alignItems: 'center', minWidth: '250px', overflow: 'visible', padding: 1 }}>
-                                                <IconButton 
-                                                    onClick={() => {
-                                                        console.log("Decrementing item:", item.id);
-                                                        dispatch(decrementQuantity(item.id));
-                                                    }}
-                                                    disabled={item.quantity <= 1}
-                                                    size="small"
-                                                    sx={{ 
-                                                        display: 'inline-flex !important', 
-                                                        visibility: 'visible !important',
-                                                        border: '1px solid blue', // For debugging
-                                                        color: 'blue' // For debugging
-                                                    }}
-                                                >
-                                                    <RemoveIcon />
-                                                </IconButton>
-                                                <Typography sx={{ mx: 2 }}>
-                                                    {item.quantity}
-                                                </Typography>
-                                                <IconButton 
-                                                    onClick={() => {
-                                                        console.log("Incrementing item:", item.id);
-                                                        dispatch(incrementQuantity(item.id));
-                                                    }}
-                                                    size="small"
-                                                    sx={{ 
-                                                        display: 'inline-flex !important', 
-                                                        visibility: 'visible !important',
-                                                        border: '1px solid green', // For debugging
-                                                        color: 'green' // For debugging
-                                                    }}
-                                                >
-                                                    <AddIcon />
-                                                </IconButton>
-                                                {/* Log to confirm the remove button is being rendered */}
-                                                {console.log("Rendering remove button for item:", item.id)}
-                                                <IconButton 
-                                                    onClick={() => {
-                                                        console.log("Removing item:", item.id);
-                                                        dispatch(removeItem(item.id));
-                                                    }}
-                                                    sx={{ 
-                                                        ml: 2, 
-                                                        display: 'inline-flex !important', 
-                                                        visibility: 'visible !important',
-                                                        zIndex: 1000, // Ensure it's not overlapped
-                                                        border: '2px solid red', // For debugging
-                                                        color: 'red', // Temporarily override color="error"
-                                                        padding: 1 // Add padding for visibility
-                                                    }}
-                                                    size="small"
-                                                >
-                                                    <DeleteIcon />
-                                                </IconButton>
-                                            </Box>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
-                            );
-                        })}
+                                            <Typography sx={{ mx: 1, minWidth: '20px', textAlign: 'center' }}>
+                                                {item.quantity}
+                                            </Typography>
+                                            
+                                            <IconButton 
+                                                onClick={() => dispatch(incrementQuantity(item.id))}
+                                                color="primary"
+                                                size="small"
+                                            >
+                                                <AddIcon />
+                                            </IconButton>
+                                            
+                                            <IconButton 
+                                                onClick={() => dispatch(removeItem(item.id))}
+                                                color="error"
+                                                size="small"
+                                                sx={{ ml: 2, color: '#d32f2f', border: '1px solid red' }} // Force color and add border for debugging
+                                            >
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </Box>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
                     </Grid>
                     
                     <Box sx={{ mt: 4, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -122,13 +90,13 @@ const Cart = () => {
                             color="error" 
                             onClick={() => dispatch(clearCart())}
                         >
-                            Reset Cart
+                            Clear Cart
                         </Button>
                     </Box>
                 </>
             ) : (
                 <Typography variant="h6" align="center" sx={{ my: 4 }}>
-                    Cart is empty
+                    Your cart is empty
                 </Typography>
             )}
         </Box>

@@ -54,6 +54,18 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* Ensure Material-UI IconButton isn't affected by global button styles */
+.MuiIconButton-root {
+    background-color: transparent !important;
+    border: none !important;
+    padding: 8px !important; /* Adjust padding to ensure visibility */
+}
+
+/* Ensure the DeleteIcon is visible */
+.MuiIconButton-root .MuiSvgIcon-root {
+    color: inherit !important; /* Inherit the color from the IconButton (e.g., "error" = red) */
+}
+
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
