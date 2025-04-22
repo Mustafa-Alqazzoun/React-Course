@@ -9,8 +9,9 @@ import { Link, useNavigate } from "react-router";
 import { UserContext } from "../Context/UserContext";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../slices/cart";
+import {memo} from "react"
 
-function Product(props) {
+const Product = memo(function Product(props) {
   const [counter, setCounter] = useState(0);
   const [showOutOfStock, setShowOutOfStock] = useState(false);
   const [showButton, setShowButton]= useState(true)
@@ -87,5 +88,5 @@ function Product(props) {
       } */}
     </Card>
   );
-}
+})
 export default Product;
